@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Webpage</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f0f0f0;
+            transition: background-color 0.3s;
+        }
+        .hidden {
+            display: none;
+        }
+        .modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        .error {
+            color: red;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <h1>Interactive Webpage</h1>
+
+    <!-- Toggle Background Button -->
+    <button id="toggleColorBtn">Toggle Background Color</button>
+
+    <!-- Slider to Adjust Paragraph Text Size -->
+    <div>
+        <label for="textSizeSlider">Adjust Text Size:</label>
+        <input type="range" id="textSizeSlider" min="12" max="36" value="16">
+        <p id="resizableText">This text size can be adjusted using the slider.</p>
+    </div>
+
+    <!-- Modal Section -->
+    <button id="openModalBtn">Open Modal</button>
+    <div id="modal" class="hidden">
+        <div class="modal">
+            <p>This is a modal window.</p>
+            <button id="closeModalBtn">Close</button>
+        </div>
+    </div>
+
+    <!-- Form with Validation -->
+    <form id="userForm">
+        <div>
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name">
+            <span id="nameError" class="error hidden">Name must be at least 3 characters long.</span>
+        </div>
+        <div>
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email">
+            <span id="emailError" class="error hidden">Enter a valid email address.</span>
+        </div>
+        <div>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password">
+            <span id="passwordError" class="error hidden">Password must be at least 8 characters long, include one uppercase letter and one number.</span>
+        </div>
+        <button type="submit">Submit</button>
+    </form>
+
+    <!-- Dropdown Menu -->
+    <div>
+        <label for="dropdownMenu">Choose an option:</label>
+        <select id="dropdownMenu">
+            <option value="default">-- Select an option --</option>
+            <option value="option1">Option 1</option>
+            <option value="option2">Option 2</option>
+        </select>
+        <p id="dropdownMessage"></p>
+    </div>
+
+    <script>
+        // Toggle Background Color
+        const toggleColorBtn = document.getElementById('toggleColorBtn');
+        let isBlue = false;
+        toggleColorBtn.addEventListener('click', () => {
+            document.body.style.backgroundColor = isBlue ? '#f0f0f0' : '#add8e6';
+            isBlue = !isBlue;
+        });
+
+        // Adjust Paragraph Text Size
+        const textSizeSlider = document.getElementById('textSizeSlider');
+        const resizableText = document.getElementById('resizableText');
+        textSizeSlider.addEventListener('input', (event) => {
+            resizableText.style.fontSize = `${event.target.value}px`;
+        });
+
+        // Modal Functionality
+        const openModalBtn = document.getElementById('openModalBtn');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const modal = document.getElementById('modal');
+        openModalBtn.addEventListener('click', () => {
+            modal.classList.remove('hidden');
+        });
+        closeModalBtn.addEventListener('click', () => {
+            modal.classList.add('hidden');
+        });
+
+        // Form Validation
+        const userForm = document.getElementById('userForm');
+        const nameField = document.getElementById('name');
+        const emailField = document.getElementById('email');
+        const passwordField = document.getElementById('password');
+        const nameError = document.getElementById('nameError');
+        const emailError = document.getElementById('emailError');
+        const passwordError = document.getElementById('passwordError');
+
+        userForm.addEventListener('submit', (event) => {
+            let valid = true;
+
+            // Name Validation
+            if (nameField.value.trim().length < 3) {
+                nameError.classList.remove('hidden');
+                valid = false;
+            } else {
+                nameError.classList.add('hidden');
+            }
+
+            // Email Validation
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(emailField.value.trim())) {
+                emailError.classList.remove('hidden');
+                valid = false;
+            } else {
+                emailError.classList.add('hidden');
+            }
+
+            // Password Validation
+            const passwordPattern = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
+            if (!passwordPattern.test(passwordField.value)) {
+                passwordError.classList.remove('hidden');
+                valid = false;
+            } else {
+                passwordError.classList.add('hidden');
+            }
+
+            if (!valid) {
+                event.preventDefault();
+            }
+        });
+
+        // Dropdown Menu Event
+        const dropdownMenu = document.getElementById('dropdownMenu');
+        const dropdownMessage = document.getElementById('dropdownMessage');
+        dropdownMenu.addEventListener('change', () => {
+            if (dropdownMenu.value !== 'default') {
+                dropdownMessage.textContent = `You selected: ${dropdownMenu.value}`;
+            } else {
+                dropdownMessage.textContent = '';
+            }
+        });
+    </script>
+</body>
+</html>
